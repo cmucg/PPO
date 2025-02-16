@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPO example</title>
+  <!-- https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js -->
+  <!-- <script src="Tone.js"></script> -->
+
+</head>
+<body>
+  <div id="dom0"></div>
+
+  <script>
+    const inputq={} // my dom template
+    inputq.inType='checkbox' // constructor parameter, as property beginning with "in", will not be 
+    inputq.Build = (()=>{  // add this line at last, to make a string, thus avoid errors in instantiation
+        inputq.dom1 = document.createElement('div')
+        inputq.dom1.id = 'inputq'
+        inputq.dom1.display = 'inline'
+        inputq.lab1 = document.createElement('lab')
+        inputq.dom1.appendChild(inputq.lab1)
+        if(inputq.inType>'A'){
+            inputq.input = document.createElement('input')
+            inputq.input.type = inputq.inType
+            inputq.dom1.appendChild(inputq.input)
+            inputq.lab2 = document.createElement('lab')
+            inputq.dom1.appendChild(inputq.lab2) 
+        }
+        inputq.AppendTo = (dom0)=>{dom0.appendChild(inputq.dom1)}
+    }).toString()  // add this line at last, to make a string, thus avoid errors in instantiation
+
+    function New (templateName='inputq',newObjectName='inputq1'){
+        eval(`${newObjectName}=structuredClone(${templateName})`)
+        const build = eval(`${templateName}.Build.replaceAll(/(?<!\w)${templateName}(?=\.|\')/g,'${newObjectName}')`)
+        eval(`${newObjectName}.Build=${build}`)
+    }
+
+    const wq = {} // name-space-object of web-elements
+    wq.dom0 = document.querySelector('#dom0')
+    wq.dom0.align = 'center'
+    
+    New('inputq','cgCheck1')
+    cgCheck1.inType = 'checkbox'
+    cgCheck1.Build()
+    cgCheck1.lab1.innerText='Sound continues after key is released:'
+    cgCheck1.input.checked = true
+    cgCheck1.AppendTo(wq.dom0)
+
+    New('inputq','cgCheck2')
+    cgCheck2.inType = 'checkbox'
+    cgCheck2.Build()
+    cgCheck2.lab1.innerText='Play chord when multiple keys pressed:'
+    cgCheck2.input.checked = false
+    cgCheck2.AppendTo(wq.dom0)
+
+    New('inputq','cgText')
+    cgText.inType = 'text'
+    cgText.Build()
+    cgText.lab1.innerText = 'Change pitch: rotate mouse-wheel or left right up down key to change'
+    cgText.input.size = 2
+    cgText.input.value = '0'
+    cgText.lab2.innerText = 'semitones. '
+    cgText.AppendTo(wq.dom0)
+
+  </script>
+</body>
+</html>
